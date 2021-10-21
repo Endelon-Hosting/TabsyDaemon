@@ -8,4 +8,10 @@
     <PackageReference Include="Docker.DotNet" Version="3.125.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="JosyCallbacks">
+      <HintPath>JosyCallbacks.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
