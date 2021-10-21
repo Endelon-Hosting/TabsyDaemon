@@ -5,7 +5,9 @@ VisualStudioVersion = 16.0.31729.503
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabsyDaemonTest", "TabsyDaemonTest\TabsyDaemonTest.csproj", "{1EE59620-C15B-41D8-B43B-DD87BDBA6BC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabsyDaemon", "TabsyDaemon\TabsyDaemon.csproj", "{32E58F7D-AFE3-4211-9CBD-7F82C75871CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabsyDaemon", "TabsyDaemon\TabsyDaemon.csproj", "{32E58F7D-AFE3-4211-9CBD-7F82C75871CF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabsyClient", "TabsyClient\TabsyClient.csproj", "{10FB7800-9095-442E-92E9-436C0D103511}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{32E58F7D-AFE3-4211-9CBD-7F82C75871CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{32E58F7D-AFE3-4211-9CBD-7F82C75871CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{32E58F7D-AFE3-4211-9CBD-7F82C75871CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{10FB7800-9095-442E-92E9-436C0D103511}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{10FB7800-9095-442E-92E9-436C0D103511}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{10FB7800-9095-442E-92E9-436C0D103511}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{10FB7800-9095-442E-92E9-436C0D103511}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

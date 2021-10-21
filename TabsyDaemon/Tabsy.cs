@@ -18,7 +18,8 @@ namespace TabsyDaemon
         {
             Services = new List<ITabsyService>()
             {
-                new DockerService()
+                new DockerService(),
+                new JosyService()
             };
         }
 
@@ -37,7 +38,7 @@ namespace TabsyDaemon
             {
                 try
                 {
-                    service.Start().Wait();
+                    service.Start();
                     Logger.Info($"Started service {service.GetType().Name}");
 
                     startedServices++;

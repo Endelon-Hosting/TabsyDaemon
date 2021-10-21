@@ -22,14 +22,14 @@ namespace TabsyDaemon.Services
             }
         }
 
-        public async Task Start()
+        public async void Start()
         {
             DockerClient = new DockerClientConfiguration(
                 new Uri("unix:///var/run/docker.sock"))
                     .CreateClient();
         }
 
-        public async Task Stop()
+        public async void Stop()
         {
             DockerClient.Dispose();
             DockerClient = null;

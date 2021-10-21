@@ -4,8 +4,8 @@ namespace TabsyDaemon.Interfaces
 {
     public interface ITabsyService
     {
-        public Task Start();
-        public Task Stop();
+        public void Start();
+        public void Stop();
         public bool IsRunning { get; }
     }
 }
