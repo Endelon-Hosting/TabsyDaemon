@@ -30,7 +30,7 @@ namespace TabsyDaemon.Services
         // Logger Callback for TcpServer
         private void OnLog(string obj)
         {
-            Logger.Info("Network: " + obj);
+            Logger.Debug("Network: " + obj);
         }
 
         #region Network Callbacks
@@ -42,12 +42,12 @@ namespace TabsyDaemon.Services
 
         private void OnClientDisconnected(object sender, ClientDisconnectedEventArgs e)
         {
-            Logger.Debug($"TabsyClient disconnected. Remote endpoint: {e.IpPort}");
+            Logger.Info($"TabsyClient disconnected. Remote endpoint: {e.IpPort}");
         }
 
         private void OnClientConnected(object sender, ClientConnectedEventArgs e)
         {
-            Logger.Debug($"TabsyClient connected. Remote endpoint: {e.IpPort}");
+            Logger.Info($"TabsyClient connected. Remote endpoint: {e.IpPort}");
         }
 
         #endregion

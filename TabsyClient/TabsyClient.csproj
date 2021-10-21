@@ -5,4 +5,18 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SuperSimpleTcp" Version="2.4.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="JosyCallbacks">
+      <HintPath>..\TabsyDaemon\JosyCallbacks.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
