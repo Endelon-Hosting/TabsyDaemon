@@ -5,34 +5,61 @@ using System.Net;
 using TabsyDaemon.Interfaces;
 using System.Net.Sockets;
 using TabsyDaemon.Logging;
+using System.Threading.Tasks;
+using System.Text;
+using AustinHarris.JsonRpc;
+using TabsyDaemon.RPC;
 
 namespace TabsyDaemon.Services
 {
     public class RpcService : ITabsyService
     {
-        public bool IsRunning  { get; }
+        public bool IsRunning { get; set; }
         public Action<StreamWriter, string> HandleRequest { get; set; }
         private TcpListener Listener { get; set; }
+        private static object service; // From https://github.com/Astn/JSON-RPC.NET/wiki/Getting-Started-(Sockets)
 
         public async void Start()
         {
+            service = new RpcHandler();
+
+            var rpcResultHandler = new AsyncCallback(
+                state =>
+                {
+                    var async = ((JsonRpcStateAsync)state);
+                    var result = async.Result;
+                    var writer = ((StreamWriter)async.AsyncState);
+
+                    writer.WriteLine(result);
+                    writer.FlushAsync();
+                }
+            );
+
+            HandleRequest = (writer, line) =>
+            {
+                var async = new JsonRpcStateAsync(rpcResultHandler, writer) { JsonRpc = line };
+                JsonRpcProcessor.Process(async, writer);
+            };
+
+            IsRunning = true;
+
             IPAddress ip;
 
             try
             {
                 ip = IPAddress.Parse(Environment.RpcBindIp);
             }
-            catch(ArgumentNullException)
+            catch (ArgumentNullException)
             {
                 Logger.Error("The rpc bind host is not defined");
                 return;
             }
-            catch(FormatException)
+            catch (FormatException)
             {
                 Logger.Error("Invalid format for rpc host");
                 return;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logger.Error($"Unhandled exception: {e.Message}");
                 return;
@@ -44,17 +71,17 @@ namespace TabsyDaemon.Services
             {
                 port = int.Parse(Environment.RpcBindPort);
             }
-            catch(ArgumentNullException)
+            catch (ArgumentNullException)
             {
                 Logger.Error("The rpc port is not defined");
                 return;
             }
-            catch(FormatException)
+            catch (FormatException)
             {
                 Logger.Error("Invalid format for rpc port");
                 return;
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logger.Error($"Unhandled exception: {e.Message}");
                 return;
@@ -63,11 +90,63 @@ namespace TabsyDaemon.Services
             Logger.Info($"Starting rpc server on {ip.ToString()}:{port}");
 
             Listener = new TcpListener(ip, port);
+
+            try
+            {
+                Listener.Start();
+            }
+            catch (SocketException e)
+            {
+                Logger.Error($"Socket exception while starting listener: {e.Message}");
+                return;
+            }
+
+            Task t = new Task(() =>
+            {
+                while (IsRunning)
+                {
+                    try
+                    {
+                        using (var client = Listener.AcceptTcpClient())
+                        using (var stream = client.GetStream())
+                        {
+                            Logger.Debug("Rpc Network: Client Connected..");
+                            var reader = new StreamReader(stream, Encoding.UTF8);
+                            var writer = new StreamWriter(stream, new UTF8Encoding(false));
+
+                            while (!reader.EndOfStream)
+                            {
+                                var line = reader.ReadLine();
+                                HandleRequest(writer, line);
+
+                                Logger.Debug($"Rpc Network: REQUEST: {line}");
+                            }
+                        }
+                    }
+                    catch (Exception e)
+                    {
+                        Logger.Error($"Rpc Network: Unhandeld exception {e}");
+                    }
+                }
+            });
+            t.Start();
         }
 
         public async void Stop()
         {
-            
+            IsRunning = false;
+
+            Logger.Info("Closing rpc server");
+
+            try
+            {
+                Listener.Stop();
+            }
+            catch (SocketException e)
+            {
+                Logger.Error($"Socket exception while closing listener: {e.Message}");
+                return;
+            }
         }
     }
 }

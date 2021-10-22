@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TabsyClient": {
+      "commandName": "Project",
+      "commandLineArgs": "localhost:9000"
+    }
+  }
+}

@@ -18,7 +18,8 @@ namespace TabsyDaemon
         {
             Services = new List<ITabsyService>()
             {
-                new DockerService()
+                new DockerService(),
+                new RpcService()
             };
         }
 
