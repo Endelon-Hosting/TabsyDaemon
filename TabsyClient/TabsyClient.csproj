@@ -10,13 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="SuperSimpleTcp" Version="2.4.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="JosyCallbacks">
-      <HintPath>..\TabsyDaemon\JosyCallbacks.dll</HintPath>
-    </Reference>
+    <PackageReference Include="AustinHarris.JsonRpc" Version="1.2.3" />
   </ItemGroup>
 
 </Project>

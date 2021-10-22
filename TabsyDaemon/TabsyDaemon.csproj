@@ -5,14 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="AustinHarris.JsonRpc" Version="1.2.3" />
     <PackageReference Include="Docker.DotNet" Version="3.125.5" />
-    <PackageReference Include="SuperSimpleTcp" Version="2.4.1.1" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Reference Include="JosyCallbacks">
-      <HintPath>JosyCallbacks.dll</HintPath>
-    </Reference>
   </ItemGroup>
 
 </Project>
