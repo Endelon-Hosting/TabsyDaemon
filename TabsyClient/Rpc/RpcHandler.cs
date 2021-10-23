@@ -1,15 +1,15 @@
-﻿using AustinHarris.JsonRpc;
+﻿using System;
 
-using TabsyClient.Logging;
+using AustinHarris.JsonRpc;
 
 namespace TabsyClient.Rpc
 {
     public class RpcHandler : JsonRpcService
     {
         [JsonRpcMethod]
-        private void log(string s)
+        private void Pong()
         {
-            Logger.Debug(s);
+            Console.WriteLine("Pong");
         }
     }
 }

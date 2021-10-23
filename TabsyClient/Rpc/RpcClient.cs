@@ -5,6 +5,8 @@ using System;
 using AustinHarris.JsonRpc;
 using TabsyClient.Logging;
 using System.Text;
+using Newtonsoft.Json;
+using System.Runtime.InteropServices.ComTypes;
 
 namespace TabsyClient.Rpc
 {
@@ -13,6 +15,16 @@ namespace TabsyClient.Rpc
         private TcpClient Client { get; set; }
         public Action<StreamWriter, string> HandleRequest { get; set; }
         private static object service; // From https://github.com/Astn/JSON-RPC.NET/wiki/Getting-Started-(Sockets)
+        private static int Counter { get; set; } = 0;
+        private StreamReader reader;
+        private StreamWriter writer;
+        private static RpcClient Instance { get; set; }
+
+        public RpcClient()
+        {
+            Instance = this;
+        }
+
         public void Connect(string host, int port)
         {
             service = new RpcHandler();
@@ -24,8 +36,8 @@ namespace TabsyClient.Rpc
                     var result = async.Result;
                     var writer = ((StreamWriter)async.AsyncState);
 
-                    writer.WriteLine(result);
-                    writer.FlushAsync();
+                    //writer.WriteLine(result);
+                    //writer.FlushAsync();
                 }
             );
 
@@ -60,25 +72,25 @@ namespace TabsyClient.Rpc
                 return;
             }
 
-            Task t = new Task(() => {
+            Task t = new Task(() =>
+            {
                 while (Client.Connected)
                 {
                     try
                     {
-                        using (var stream = Client.GetStream())
+                        var stream = Client.GetStream();
+                        Logger.Debug("Rpc Network: Client Connected..");
+                        reader = new StreamReader(stream, Encoding.UTF8);
+                        writer = new StreamWriter(stream, new UTF8Encoding(false));
+
+                        while (!reader.EndOfStream)
                         {
-                            Logger.Debug("Rpc Network: Client Connected..");
-                            var reader = new StreamReader(stream, Encoding.UTF8);
-                            var writer = new StreamWriter(stream, new UTF8Encoding(false));
+                            var line = reader.ReadLine();
+                            HandleRequest(writer, line);
 
-                            while (!reader.EndOfStream)
-                            {
-                                var line = reader.ReadLine();
-                                HandleRequest(writer, line);
-
-                                Logger.Debug($"Rpc Network: REQUEST: {line}");
-                            }
+                            //Logger.Debug($"Rpc Network: REQUEST: {line}");
                         }
+
                     }
                     catch (Exception e)
                     {
@@ -89,7 +101,24 @@ namespace TabsyClient.Rpc
 
             t.Start();
         }
-        
-        // TODO: Receive and respond with ids
+
+        public static void TriggerRpc(string name, params object[] parameter)
+        {
+            RpcModel m = new RpcModel()
+            {
+                Method = name,
+                Id = Counter,
+                Params = parameter
+            };
+
+            Counter++;
+
+            Instance.Send(JsonConvert.SerializeObject(m));
+        }
+        private void Send(string s)
+        {
+            writer.WriteLine(s);
+            writer.FlushAsync();
+        }
     }
 }

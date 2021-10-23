@@ -1,5 +1,9 @@
 ﻿using System;
 
+using AustinHarris.JsonRpc;
+
+using TabsyClient.Rpc;
+
 namespace TabsyClient.Commands
 {
     public class PingCommand : ICommand
@@ -9,7 +13,7 @@ namespace TabsyClient.Commands
             DateTime time = DateTime.Now;
             Console.WriteLine("Pining");
 
-
+            RpcClient.TriggerRpc("Ping");
         }
     }
 }

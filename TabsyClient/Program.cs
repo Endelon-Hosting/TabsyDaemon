@@ -44,7 +44,7 @@ namespace TabsyClient
 
             #region Commands
 
-            CommandController.RegisterCommand();
+            CommandController.RegisterCommand("ping", new PingCommand());
 
             #endregion
 
