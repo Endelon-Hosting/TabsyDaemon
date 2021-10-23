@@ -1,13 +1,15 @@
-﻿using AustinHarris.JsonRpc;
+﻿using System;
 
-namespace TabsyDaemon.Rpc
+using AustinHarris.JsonRpc;
+
+namespace TabsyDaemon.Rpc // Server
 {
     public class RpcHandler : JsonRpcService
     {
         [JsonRpcMethod]
-        public void Ping()
+        public void Ping(DateTime dt)
         {
-            RpcClient.TriggerRpc("Pong");
+            RpcClient.TriggerRpc("Pong", dt);
         }
     }
 }

@@ -10,10 +10,9 @@ namespace TabsyClient.Commands
     {
         public void Call(string[] args)
         {
-            DateTime time = DateTime.Now;
-            Console.WriteLine("Pining");
+            Console.WriteLine("Ping");
 
-            RpcClient.TriggerRpc("Ping");
+            RpcClient.TriggerRpc("Ping", DateTime.Now);
         }
     }
 }
