@@ -45,6 +45,7 @@ namespace TabsyClient
             #region Commands
 
             CommandController.RegisterCommand("ping", new PingCommand());
+            CommandController.RegisterCommand("docker", new DockerCommand());
 
             #endregion
 

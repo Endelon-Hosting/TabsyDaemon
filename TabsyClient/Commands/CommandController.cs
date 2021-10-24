@@ -27,14 +27,7 @@ namespace TabsyClient.Commands
 
             lock(Commands)
             {
-                List<string> s = new List<string>();
-
-                for(int i = 0; i >= parts.Length; i++)
-                {
-                    s.Add(parts[i + 1]);
-                }
-
-                Commands[parts[0]].Call(s.ToArray());
+                Commands[parts[0]].Call(parts);
             }
         }
     }

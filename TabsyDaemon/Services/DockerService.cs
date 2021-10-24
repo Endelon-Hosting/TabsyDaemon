@@ -3,7 +3,9 @@
 using System;
 using System.Threading.Tasks;
 
+using TabsyDaemon.Controller;
 using TabsyDaemon.Interfaces;
+using TabsyDaemon.Logging;
 
 namespace TabsyDaemon.Services
 {
@@ -25,8 +27,18 @@ namespace TabsyDaemon.Services
         public async void Start()
         {
             DockerClient = new DockerClientConfiguration(
-                new Uri("unix:///var/run/docker.sock"))
+                new Uri(Environment.DockerConnectionUrl))
                     .CreateClient();
+
+            try
+            {
+                DockerController.GetContainers().Wait();
+                Logger.Info("Docker connection sucessfully");
+            }
+            catch(Exception e)
+            {
+                Logger.Warn($"Cannot connect to local docker engine: {e.Message}");
+            }
         }
 
         public async void Stop()

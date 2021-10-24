@@ -118,7 +118,7 @@ namespace TabsyClient.Rpc
         private void Send(string s)
         {
             writer.WriteLine(s);
-            writer.FlushAsync();
+            writer.Flush();
         }
     }
 }

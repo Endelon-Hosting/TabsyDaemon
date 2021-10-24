@@ -164,7 +164,7 @@ namespace TabsyDaemon.Services
             Counter++;
 
             writer.WriteLine(JsonConvert.SerializeObject(m));
-            writer.FlushAsync();
+            writer.Flush();
         }
     }
 }

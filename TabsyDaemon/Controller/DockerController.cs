@@ -13,12 +13,15 @@ namespace TabsyDaemon.Controller
     {
         private static DockerClient DockerClient { get { return DockerService.DockerClient; } }
 
-        public async Task<List<DockerContainer>> GetContainers()
+        public static async Task<List<DockerContainer>> GetContainers()
         {
             List<DockerContainer> result = new List<DockerContainer>();
 
             IList<ContainerListResponse> containers = await DockerClient.Containers.ListContainersAsync(
-            new ContainersListParameters());
+            new ContainersListParameters()
+            { 
+                All = true
+            });
 
             foreach(ContainerListResponse clr in containers)
             {
@@ -44,6 +47,37 @@ namespace TabsyDaemon.Controller
             }
 
             return result;
+        }
+
+        public static async Task<List<DockerImage>> GetImages()
+        {
+            List<DockerImage> images = new List<DockerImage>();
+
+            IList<ImagesListResponse> responses = await DockerClient.Images.ListImagesAsync(new ImagesListParameters()
+            {
+                All = true
+            });
+
+            foreach(ImagesListResponse res in responses)
+            {
+                DockerImage image = new DockerImage()
+                {
+                    ID = res.ID,
+                    Containers = res.Containers,
+                    Created = res.Created,
+                    Labels = res.Labels,
+                    ParentID = res.ParentID,
+                    RepoDigests = res.RepoDigests,
+                    RepoTags = res.RepoTags,
+                    SharedSize = res.SharedSize,
+                    Size = res.Size,
+                    VirtualSize = res.VirtualSize
+                };
+
+                images.Add(image);
+            }
+
+            return images;
         }
     }
 }

@@ -12,7 +12,7 @@ namespace TabsyClient.Commands
         {
             Console.WriteLine("Ping");
 
-            RpcClient.TriggerRpc("Ping", DateTime.Now);
+            RpcClient.TriggerRpc("network.ping", DateTime.Now);
         }
     }
 }
