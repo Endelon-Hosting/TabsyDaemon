@@ -23,5 +23,10 @@ namespace TabsyDaemon.Rpc // Server
         {
             RpcClient.TriggerRpc("docker.images.count.response", DockerController.GetImages().Result.Count);
         }
+        [JsonRpcMethod("debug")]
+        private void Debug()
+        {
+            ServerController.Create("test", "/bin/bash -c echo Hi > test.txt", "ubuntu", "/", 100, 1024, new System.Collections.Generic.List<string>());
+        }
     }
 }

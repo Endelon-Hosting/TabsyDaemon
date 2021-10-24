@@ -46,6 +46,7 @@ namespace TabsyClient
 
             CommandController.RegisterCommand("ping", new PingCommand());
             CommandController.RegisterCommand("docker", new DockerCommand());
+            CommandController.RegisterCommand("debug", new DebugCommand());
 
             #endregion
 

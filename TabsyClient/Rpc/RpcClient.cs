@@ -64,6 +64,7 @@ namespace TabsyClient.Rpc
             catch (SocketException e)
             {
                 Logger.Error($"Error while creating tcp client: {e.Message}");
+                return;
             }
 
             if (!Client.Connected)

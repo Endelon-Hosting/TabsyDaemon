@@ -3,9 +3,12 @@ using Docker.DotNet.Models;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Threading;
 
 using TabsyDaemon.Docker;
 using TabsyDaemon.Services;
+using System;
+using TabsyDaemon.Logging;
 
 namespace TabsyDaemon.Controller
 {
@@ -78,6 +81,60 @@ namespace TabsyDaemon.Controller
             }
 
             return images;
+        }
+        public static async Task CreateContainer(string name, string startup, string dir, string image, string containerdir, string hostdir, long cpu, long memory, List<string> envs)
+        {
+            try
+            {
+                List<string> binds = new List<string>();
+                List<string> cmd = new List<string>();
+
+                cmd.Add(startup);
+
+                binds.Add(containerdir + ":" + hostdir);
+
+                HostConfig hostConfig = new HostConfig()
+                {
+                    Binds = binds,
+                    CPUPercent = cpu,
+                    Memory = memory
+                };
+
+                CreateContainerResponse response = await DockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
+                {
+                    Name = name,
+                    User = "root",
+                    WorkingDir = dir,
+                    Image = image,
+                    HostConfig = hostConfig,
+                    Env = envs,
+                    Cmd = cmd
+                },
+                CancellationToken.None);
+
+                foreach (string s in response.Warnings)
+                {
+                    Logger.Warn($"Waring creating docker container: {s}");
+                }
+            }
+            catch(Exception e)
+            {
+                Logger.Error($"Error creating docker container: {e.Message}");
+            }
+        }
+
+        public static async Task CreateVolume(string name, string containerdir, string hostdir)
+        {
+            Dictionary<string, string> thing = new Dictionary<string, string>();
+
+            thing.Add(containerdir, hostdir);
+
+            VolumeResponse response = await DockerClient.Volumes.CreateAsync(new VolumesCreateParameters()
+            {
+                Name = name,
+                DriverOpts = thing
+            },
+            CancellationToken.None);
         }
     }
 }

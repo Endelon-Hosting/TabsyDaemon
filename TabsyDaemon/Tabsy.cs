@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 using TabsyDaemon.Interfaces;
 using TabsyDaemon.Logging;
@@ -50,6 +48,14 @@ namespace TabsyDaemon
             }
 
             Logger.Info($"Started {startedServices} services");
+
+            #endregion
+
+            #region Filesystem
+
+            Directory.CreateDirectory(Environment.TabsyDirectory);
+            Directory.CreateDirectory(Environment.TabsyContainerDirectory);
+            Directory.CreateDirectory(Environment.TabsyImagesDirectory);
 
             #endregion
         }
