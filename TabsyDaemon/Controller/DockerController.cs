@@ -9,6 +9,7 @@ using TabsyDaemon.Docker;
 using TabsyDaemon.Services;
 using System;
 using TabsyDaemon.Logging;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace TabsyDaemon.Controller
 {
@@ -22,11 +23,11 @@ namespace TabsyDaemon.Controller
 
             IList<ContainerListResponse> containers = await DockerClient.Containers.ListContainersAsync(
             new ContainersListParameters()
-            { 
+            {
                 All = true
             });
 
-            foreach(ContainerListResponse clr in containers)
+            foreach (ContainerListResponse clr in containers)
             {
                 DockerContainer c = new DockerContainer()
                 {
@@ -61,7 +62,7 @@ namespace TabsyDaemon.Controller
                 All = true
             });
 
-            foreach(ImagesListResponse res in responses)
+            foreach (ImagesListResponse res in responses)
             {
                 DockerImage image = new DockerImage()
                 {
@@ -82,12 +83,47 @@ namespace TabsyDaemon.Controller
 
             return images;
         }
-        public static async Task CreateContainer(string name, string dir, string image, string containerdir, string hostdir, long cpu, long memory, List<string> envs)
+        public static async Task DownloadImage(string name)
+        {
+            bool b = false;
+
+            foreach (DockerImage image in GetImages().Result)
+            {
+                if (image.Name == name)
+                    b = true;
+            }
+            if (b)
+                return;
+
+            Logger.Info($"Attempting to pull image {name} to {DockerClient.Configuration.EndpointBaseUri}");
+
+            try
+            {
+                var report = new Progress<JSONMessage>(msg =>
+                {
+                    Logger.Info($"{msg.Status}|{msg.ProgressMessage}|{msg.ErrorMessage}");
+                });
+
+                await DockerClient.Images.CreateImageAsync(new ImagesCreateParameters
+                {
+                    FromImage = name
+                },
+                new AuthConfig(),
+                report
+                );
+                Logger.Info($"Successfully pulled image {name} to {DockerClient.Configuration.EndpointBaseUri}");
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"Exception thrown attempting to pull image {name} to {DockerClient.Configuration.EndpointBaseUri}");
+                Logger.Error($"{ex}");
+            }
+        }
+        public static async Task CreateContainer(string name, string dir, string image, string containerdir, string hostdir, long cpu, long memory)
         {
             try
             {
-                Logger.Debug(hostdir);
-                Logger.Debug(containerdir);
+                await DownloadImage(image);
 
                 List<string> entry = new List<string>();
 
@@ -110,7 +146,6 @@ namespace TabsyDaemon.Controller
                     WorkingDir = dir,
                     Image = image,
                     HostConfig = hostConfig,
-                    Env = envs,
                     Entrypoint = entry,
                 },
                 CancellationToken.None);
@@ -120,10 +155,14 @@ namespace TabsyDaemon.Controller
                     Logger.Warn($"Waring creating docker container: {s}");
                 }
             }
-            catch(Exception e)
+            catch (Exception e)
             {
                 Logger.Error($"Error creating docker container: {e.Message}");
             }
+        }
+        public static async Task StartContainer(string name)
+        {
+
         }
 
         public static async Task CreateVolume(string name, string containerdir, string hostdir)

@@ -163,6 +163,7 @@ namespace TabsyDaemon.Services
             m.Id = Counter;
             Counter++;
 
+            writer.Flush();
             writer.WriteLine(JsonConvert.SerializeObject(m));
             writer.Flush();
         }

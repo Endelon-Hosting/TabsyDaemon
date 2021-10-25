@@ -16,7 +16,7 @@ namespace TabsyClient.Rpc // Client
         [JsonRpcMethod("docker.containers.count.response")]
         private void SetDockerContainersCount(int c)
         {
-            Console.WriteLine($"Docker {c} conatiners found on daemon");
+            Console.WriteLine($"Docker {c} containers found on daemon");
         }
         [JsonRpcMethod("docker.images.count.response")]
         private void SetDockerImagesCount(int c)

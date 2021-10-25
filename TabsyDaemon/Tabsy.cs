@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
+using TabsyDaemon.Controller;
 using TabsyDaemon.Interfaces;
 using TabsyDaemon.Logging;
 using TabsyDaemon.Services;
@@ -53,9 +54,15 @@ namespace TabsyDaemon
 
             #region Filesystem
 
-            Directory.CreateDirectory(Environment.TabsyDirectory);
-            Directory.CreateDirectory(Environment.TabsyContainerDirectory);
-            Directory.CreateDirectory(Environment.TabsyImagesDirectory);
+            Directory.CreateDirectory(Environment.Directory);
+            Directory.CreateDirectory(Environment.ContainerDirectory);
+            Directory.CreateDirectory(Environment.ImagesDirectory);
+
+            #endregion
+
+            #region Images
+
+            RepoController.LoadImages();
 
             #endregion
         }

@@ -17,5 +17,5 @@
         "install.sh",
         "eula.txt"
     ],
-    "image": "ghcr.io/software-noob/pterodactyl-images:java_16"
+    "image": "ghcr.io/software-noob/pterodactyl-images:java_16:latest"
 }

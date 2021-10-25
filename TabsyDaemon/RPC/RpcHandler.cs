@@ -26,7 +26,7 @@ namespace TabsyDaemon.Rpc // Server
         [JsonRpcMethod("debug")]
         private void Debug()
         {
-            ServerController.Create("test", "ubuntu", "/root", 100, 1024, new System.Collections.Generic.List<string>());
+            //ServerController.Create("test", "ubuntu", "/root", 100, 1024, new System.Collections.Generic.List<string>());
         }
     }
 }

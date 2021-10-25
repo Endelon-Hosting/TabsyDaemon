@@ -17,5 +17,12 @@ public class DockerImage
         public long SharedSize { get; set; }
         public long Size { get; set; }
         public long VirtualSize { get; set; }
+        public string Name 
+        { 
+            get
+            {
+                return RepoTags[0];
+            } 
+        }
     }
 }
