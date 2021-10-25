@@ -9,10 +9,10 @@ namespace TabsyDaemon.Controller
 {
     public class ServerController
     {
-        public static void Create(string name, string startup, string image, string containerdir, long cpu, long memory, List<string> envs)
+        public static void Create(string name, string image, string containerdir, long cpu, long memory, List<string> envs)
         {
             Directory.CreateDirectory(Environment.TabsyContainerDirectory + $"/{name}");
-            DockerController.CreateContainer(name, startup, "/", image, containerdir, Environment.TabsyContainerDirectory + $"/{name}", cpu, memory * 1024 * 1024, envs).Wait();
+            DockerController.CreateContainer(name, "/", image, containerdir, Environment.TabsyContainerDirectory + $"/{name}", cpu, memory * 1024 * 1024, envs).Wait();
         }
     }
 }

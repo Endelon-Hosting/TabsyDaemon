@@ -82,22 +82,25 @@ namespace TabsyDaemon.Controller
 
             return images;
         }
-        public static async Task CreateContainer(string name, string startup, string dir, string image, string containerdir, string hostdir, long cpu, long memory, List<string> envs)
+        public static async Task CreateContainer(string name, string dir, string image, string containerdir, string hostdir, long cpu, long memory, List<string> envs)
         {
             try
             {
-                List<string> binds = new List<string>();
-                List<string> cmd = new List<string>();
+                Logger.Debug(hostdir);
+                Logger.Debug(containerdir);
 
-                cmd.Add(startup);
+                List<string> entry = new List<string>();
 
-                binds.Add(containerdir + ":" + hostdir);
+                entry.Add("/bin/bash");
+                entry.Add("/root/startup.sh");
 
                 HostConfig hostConfig = new HostConfig()
                 {
-                    Binds = binds,
                     CPUPercent = cpu,
-                    Memory = memory
+                    Memory = memory,
+                    Binds = new[] {
+                        hostdir + ":" + containerdir
+                    }
                 };
 
                 CreateContainerResponse response = await DockerClient.Containers.CreateContainerAsync(new CreateContainerParameters()
@@ -108,7 +111,7 @@ namespace TabsyDaemon.Controller
                     Image = image,
                     HostConfig = hostConfig,
                     Env = envs,
-                    Cmd = cmd
+                    Entrypoint = entry,
                 },
                 CancellationToken.None);
 
