@@ -1,0 +1,21 @@
+{
+    "name": "Minecraft Java 16",
+    "author": "admin@endelon-hosting.de",
+    "startup": [
+        "java -server -Xms500M -Xmx{RAM}G server.jar nogui"
+    ],
+    "stop": "stop",
+    "ports": [
+        "25565"
+    ],
+    "rocky.type": "minecraft",
+    "install": [
+        "bash install.sh",
+        "rm install.sh"
+    ],
+    "files": [
+        "install.sh",
+        "eula.txt"
+    ],
+    "image": "ghcr.io/software-noob/pterodactyl-images:java_16"
+}

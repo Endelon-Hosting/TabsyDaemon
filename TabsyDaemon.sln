@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabsyDaemon", "TabsyDaemon\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabsyClient", "TabsyClient\TabsyClient.csproj", "{10FB7800-9095-442E-92E9-436C0D103511}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TabsyShared", "TabsyShared\TabsyShared.csproj", "{D48A526E-3F70-44AD-8CB3-29F3ED401502}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TabsyShared", "TabsyShared\TabsyShared.csproj", "{D48A526E-3F70-44AD-8CB3-29F3ED401502}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
