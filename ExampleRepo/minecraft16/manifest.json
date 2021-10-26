@@ -10,8 +10,8 @@
     ],
     "rocky.type": "minecraft",
     "install": [
-        "bash install.sh",
-        "rm install.sh"
+        "",
+        ""
     ],
     "files": [
         "install.sh",
